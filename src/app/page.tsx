@@ -1,113 +1,130 @@
+import Pricing from "@/components/pricing";
+import { Button } from "@/components/ui/button";
+import { ContainerScroll } from "@/components/ui/container-scroll";
+import { InfiniteMovingCardsDemo } from "@/components/ui/infinite-moving-cards";
+import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
+import Transition from "@/components/ui/transition";
+import { AudioLines, FileAudio, FileText } from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
+    <main className="md:mt-6 relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full -z-10">
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+          src={"/hero-circle.svg"}
+          width={600}
+          height={600}
+          alt="header"
+          className="w-full"
         />
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <ContainerScroll>
+        <div className="lg:w-9/12 md:w-10/12 w-11/12 mx-auto pt-28 relative space-y-4">
+          <Transition initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+            <h2 className="lg:text-6xl md:text-6xl sm:text-5xl text-4xl font-bold text-center">
+              AI-Powered Productivity Suite: Unleash the Power of Information
+            </h2>
+          </Transition>
+          <Transition initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+            <p className="text-center py-4 text-2xl text-white/40 lg:px-28 md:px-20 sm:px-16 px-4">
+              Turn PDFs into insights, text into voices, and voices into text -
+              effortlessly.
+            </p>
+          </Transition>
+          <Transition initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+            <div className="flex items-center justify-center py-4">
+              <Button className="uppercase" variant={"outline"} size={"lg"}>
+                Get Started
+              </Button>
+            </div>
+          </Transition>
+        </div>
+      </ContainerScroll>
+      <Transition>
+        <p className="md:text-2xl text-xl md:w-2/3 max-md:px-4 mx-auto md:py-28 py-10 text-center text-white/50">
+          Drowning in information? We get it. Text, audio, and PDFs can pile up{" "}
+          <span className="text-white/90 font-semibold">quickly,</span>{" "}
+          hindering your{" "}
+          <span className="text-white/90 font-semibold">productivity</span> and
+          making it difficult to extract the information you need. Here&apos;s
+          where our AI-powered suite comes in,{" "}
+          <span className="text-white/90 font-semibold">transforming</span> your
+          workflow with intelligent tools that make accessing information{" "}
+          <span className="text-white/90 font-semibold">faster</span> and easier
+          than ever.
+        </p>
+      </Transition>
+      <div className="flex items-center justify-center flex-col gap-4 py-10">
+        <Transition>
+          <span className="text-cyan-400 text-xl">AI Solution</span>
+        </Transition>
+        <Transition className="w-full">
+          <h4
+            className="md:text-6xl text-4xl
+            md:w-1/2 mx-auto text-center font-bold"
+          >
+            Chat Smarter, Not Harder with TensityAI
+          </h4>
+        </Transition>
       </div>
+      <StickyScroll content={solutionSlides} />
+      <Pricing />
+      <div className="py-8 md:pt-16">
+        <h5 className="text-4xl text-center">What the community is saying</h5>
+      </div>
+      <InfiniteMovingCardsDemo />
     </main>
   );
 }
+
+const solutionSlides = [
+  {
+    icon: <FileText />,
+    title: "Talk to PDF",
+    description:
+      "* Ask questions, get answers: Upload a PDF and our AI will analyze the content, allowing you to ask natural language questions and receive precise answers in seconds.  * Save time and effort: Skip skimming through pages. Get straight to the information you need, saving valuable time and boosting your efficiency.",
+    content: (
+      <Image
+        src={"/feature-1.jpg"}
+        width={500}
+        height={500}
+        alt="talk to pdf"
+        loading="lazy"
+        className="object-cover w-full h-full"
+      />
+    ),
+  },
+  {
+    icon: <AudioLines />,
+    title: "Text to speech",
+    description:
+      "* Listen while you work: Convert any text into high-quality, natural-sounding speech. Listen on the go, during commutes, or while multitasking. * Improve accessibility: Enhance the accessibility of your content for individuals with visual impairments or learning difficulties.",
+    content: (
+      <Image
+        src={"/speech.jpg"}
+        width={500}
+        height={500}
+        alt="talk to pdf"
+        loading="lazy"
+        className="object-cover w-full h-full"
+      />
+    ),
+  },
+  {
+    icon: <FileAudio />,
+    title: "Speech to text",
+    description:
+      "* Speak your mind, see it typed: Dictate your thoughts, ideas, or notes and watch them effortlessly convert into accurate text. * Boost productivity: Capture your ideas on the fly with voice dictation, saving precious time and keeping your workflow uninterrupted.",
+    content: (
+      <Image
+        src={"/feature-3.jpg"}
+        width={500}
+        height={500}
+        alt="talk to pdf"
+        loading="lazy"
+        className="object-cover w-full h-full"
+      />
+    ),
+  },
+];
