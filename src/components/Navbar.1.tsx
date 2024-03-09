@@ -1,22 +1,24 @@
 "use client";
-
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { AnimatePresence, motion as m } from "framer-motion";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Transition from "./ui/transition";
+import { auth } from "@clerk/nextjs";
+import { links } from "./Navbar";
 
-const Navbar = () => {
+export const Navbar = () => {
   const [hoverIndex, setHoverIndex] = useState<null | number>(null);
   const pathname = usePathname();
+  const {} = auth();
 
   const handleMouseLeave = () => {
     const index = links.findIndex((link) => pathname.includes(link.path));
     setHoverIndex((prev) => (prev === index ? index : null));
   };
 
-  if (["/sign-up", "/sign-in", "/dashboard"].includes(pathname)) {
+  if (["/sign-up", "/sign-in"].includes(pathname)) {
     return null;
   }
 
@@ -62,24 +64,3 @@ const Navbar = () => {
     </Transition>
   );
 };
-
-export default Navbar;
-
-const links = [
-  {
-    text: "Features",
-    path: "dashboard",
-  },
-  {
-    text: "Pricing",
-    path: "pricing",
-  },
-  {
-    text: "About",
-    path: "about",
-  },
-  {
-    text: "Blog",
-    path: "blog",
-  },
-];

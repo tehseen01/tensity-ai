@@ -3,11 +3,18 @@
 import Link from "next/link";
 import React from "react";
 import { ArrowUp, Github, Instagram, Linkedin, Twitter } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+  const pathname = usePathname();
+
   const handleScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (["/sign-up", "/sign-in", "/dashboard"].includes(pathname)) {
+    return null;
+  }
 
   return (
     <footer className="w-11/12 mx-auto py-10 mt-10">
