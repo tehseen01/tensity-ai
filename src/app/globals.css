@@ -56,4 +56,16 @@
   body {
     @apply bg-background text-foreground;
   }
+  *::-webkit-scrollbar-thumb {
+    @apply bg-secondary w-0.5 rounded-full;
+  }
+
+  *::-webkit-scrollbar {
+    @apply w-2;
+  }
+}
+
+.cl-userButtonBox {
+  flex-direction: row-reverse;
+  gap: 1.5rem;
 }

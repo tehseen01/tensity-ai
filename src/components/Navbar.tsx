@@ -6,6 +6,7 @@ import { AnimatePresence, motion as m } from "framer-motion";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Transition from "./ui/transition";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [hoverIndex, setHoverIndex] = useState<null | number>(null);
@@ -54,9 +55,14 @@ const Navbar = () => {
           </div>
         </AnimatePresence>
         <div>
-          <Button asChild>
-            <Link href={"/sign-in"}>Login</Link>
-          </Button>
+          <SignedOut>
+            <Button asChild>
+              <Link href={"/sign-in"}>Login</Link>
+            </Button>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </header>
     </Transition>

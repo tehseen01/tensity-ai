@@ -4,6 +4,7 @@ import { ContainerScroll } from "@/components/ui/container-scroll";
 import { InfiniteMovingCardsDemo } from "@/components/ui/infinite-moving-cards";
 import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 import Transition from "@/components/ui/transition";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { AudioLines, FileAudio, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,14 +36,26 @@ export default function Home() {
           </Transition>
           <Transition initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
             <div className="flex items-center justify-center py-4">
-              <Button
-                className="uppercase"
-                variant={"outline"}
-                size={"lg"}
-                asChild
-              >
-                <Link href={"/sign-up"}>Get Started</Link>
-              </Button>
+              <SignedOut>
+                <Button
+                  className="uppercase"
+                  variant={"outline"}
+                  size={"lg"}
+                  asChild
+                >
+                  <Link href={"/sign-up"}>Get Started</Link>
+                </Button>
+              </SignedOut>
+              <SignedIn>
+                <Button
+                  asChild
+                  variant={"outline"}
+                  size={"lg"}
+                  className="uppercase"
+                >
+                  <Link href={"/dashboard"}>Explore</Link>
+                </Button>
+              </SignedIn>
             </div>
           </Transition>
         </div>
