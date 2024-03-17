@@ -17,10 +17,6 @@ const Navbar = () => {
     setHoverIndex((prev) => (prev === index ? index : null));
   };
 
-  if (["/sign-up", "/sign-in", "/dashboard"].includes(pathname)) {
-    return null;
-  }
-
   return (
     <Transition initial={{ opacity: 0, y: -50 }}>
       <header className="flex items-center justify-between py-4 w-11/12  mx-auto">

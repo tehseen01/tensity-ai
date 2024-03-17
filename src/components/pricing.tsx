@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   CardTitle,
@@ -12,6 +14,11 @@ import { Ban, Check, Clock, EyeOff, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Transition from "./ui/transition";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { PLANS } from "@/lib/stripe";
+import { useSubscription } from "@/lib/store";
+import { useUser } from "@clerk/nextjs";
 
 export default function Pricing() {
   return (
@@ -69,102 +76,100 @@ export default function Pricing() {
         </Transition>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
-        {pricingData.map((price, index) => (
-          <Card
-            key={index}
-            className={cn(
-              "sm:p-4 p-2 rounded-[20px] shadow-xl hover:border-cyan-400",
-              !price.title.includes("Basic") && "my-4 "
-            )}
-          >
-            <CardHeader className="items-center gap-2">
-              <CardTitle className="text-white/70">{price.title}</CardTitle>
-              <div className="text-4xl font-bold">
-                <span className="text-6xl">${price.price}</span>
-                {price.title !== "Free" && (
-                  <span className="text-lg font-normal text-white/50">
-                    / MO
-                  </span>
-                )}
-              </div>
-              <CardDescription>{price.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="my-4 space-y-2">
-                {price.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-4">
-                    <span className="size-5 rounded-full border grid place-items-center bg-secondary">
-                      {(price.title === "Free" &&
-                        [
-                          "Priority customer support",
-                          "Advanced features",
-                        ].includes(feature)) ||
-                      (price.title === "Basic" &&
-                        "Advanced features".includes(feature)) ? (
-                        <X className="size-3 text-black" />
-                      ) : (
-                        <Check className="size-3 text-cyan-400 " />
-                      )}
-                    </span>
-                    <p className="text-wrap text-white/50">{feature}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button
-                className="w-full rounded-full text-lg"
-                variant="outline"
-                size={"lg"}
-              >
-                Get started
-              </Button>
-            </CardFooter>
-          </Card>
+        {PLANS.map((price, index) => (
+          <PricingCard key={index} {...price} />
         ))}
       </div>
     </div>
   );
 }
 
-const pricingData = [
-  {
-    title: "Free",
-    description: "Get started with Free.",
-    price: "0",
-    features: [
-      "10 PDF per month",
-      "100 text-to-speech per m.",
-      "50 speech-to-text per m.",
-      "Access to core features",
-      "Priority customer support",
-      "Advanced features",
-    ],
-  },
-  {
-    title: "Basic",
-    description: "Ideal for individuals and small teams.",
-    price: "12",
-    features: [
-      "Unlimited PDF",
-      "500 text-to-speech per m.",
-      "250 speech-to-text per m.",
-      "All core features",
-      "Priority customer support",
-      "Advanced features",
-    ],
-  },
-  {
-    title: "Premium",
-    description: "Designed for power users and large teams.",
-    price: "29",
-    features: [
-      "Unlimited PDF",
-      "Unlimited text-to-speech",
-      "Unlimited speech-to-text",
-      "All core features",
-      "Priority customer support",
-      "Advanced features",
-    ],
-  },
-];
+interface PricingCardProps {
+  title: string;
+  description: string;
+  amount: string;
+  priceId: string | null;
+  features: { text: string; negative?: boolean }[];
+}
+
+const PricingCard = ({
+  title,
+  description,
+  features,
+  amount,
+  priceId,
+}: PricingCardProps) => {
+  const { push } = useRouter();
+  const { activeSubscription } = useSubscription();
+  const { isSignedIn } = useUser();
+
+  const handleCheckoutClick = async () => {
+    try {
+      if (!priceId) return;
+      const body = { domain: window.location.href, priceId };
+      const { data } = await axios.post(
+        "/api/stripe/create-checkout-session",
+        body
+      );
+
+      push(data.session_url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <Card
+      className={cn(
+        "sm:p-4 p-2 rounded-[20px] shadow-xl hover:border-cyan-400",
+        !title.includes("Basic") && "my-4 "
+      )}
+    >
+      <CardHeader className="items-center gap-2">
+        <CardTitle className="text-white/70">{title}</CardTitle>
+        <div className="text-4xl font-bold">
+          <span className="text-6xl">₹{amount}</span>
+          {title !== "Free" && (
+            <span className="text-lg font-normal text-white/50">/ MO</span>
+          )}
+        </div>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ul className="my-4 space-y-2">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-center gap-4">
+              <span className="size-5 rounded-full border grid place-items-center bg-secondary">
+                {feature.negative ? (
+                  <X className="size-3 text-black" />
+                ) : (
+                  <Check className="size-3 text-cyan-400 " />
+                )}
+              </span>
+              <p className="text-wrap text-white/50">{feature.text}</p>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+      <CardFooter>
+        <Button
+          className="w-full rounded-full text-lg"
+          variant={
+            activeSubscription?.stripePriceId === priceId
+              ? "outline"
+              : "secondary"
+          }
+          size={"lg"}
+          onClick={handleCheckoutClick}
+          disabled={activeSubscription?.stripePriceId === priceId}
+        >
+          {isSignedIn
+            ? activeSubscription?.stripePriceId === priceId
+              ? "Active plan"
+              : "Get started"
+            : "Sign up"}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+};

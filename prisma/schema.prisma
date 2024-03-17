@@ -15,14 +15,46 @@ datasource db {
 
 model User {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  email       String  @unique
+  email       String
   clerkUserId String  @unique
   firstName   String?
   lastName    String?
   imageUrl    String?
+  File        File[]
+}
 
-  stripeCustomerId       String?   @unique
-  stripeSubscriptionId   String?   @unique
-  stripePriceId          String?   @unique
+enum SubscriptionType {
+  FREE
+  PREMIUM
+}
+
+model Subscription {
+  id                     String           @id @default(auto()) @map("_id") @db.ObjectId
+  clerkUserId            String           @unique
+  stripeCustomerId       String?          @unique
+  stripeSubscriptionId   String?          @unique
+  stripePriceId          String?          @unique
   stripeCurrentPeriodEnd DateTime?
+  subscriptionStatus     String?
+  subscriptionType       SubscriptionType @default(FREE)
+}
+
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
+}
+
+model File {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  url          String
+  uploadStatus UploadStatus @default(PENDING)
+
+  user   User   @relation(fields: [userId], references: [clerkUserId])
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

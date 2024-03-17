@@ -12,10 +12,6 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (["/sign-up", "/sign-in", "/dashboard"].includes(pathname)) {
-    return null;
-  }
-
   return (
     <footer className="w-11/12 mx-auto py-10 mt-10">
       <div className="flex items-center justify-between max-md:space-y-4 max-md:flex-wrap">

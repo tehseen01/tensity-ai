@@ -16,10 +16,11 @@ import { Button } from "../ui/button";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import { AnimatePresence, motion as m } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [hoverIndex, setHoverIndex] = useState<null | number>(null);
+  const pathname = usePathname();
 
   return (
     <AnimatePresence>
@@ -73,34 +74,22 @@ export const Sidebar = () => {
             size={"icon"}
             variant={"ghost"}
             onClick={() => setIsOpen(!isOpen)}
-            onMouseEnter={() => setHoverIndex(links.length + 1)}
-            className="relative"
+            className="bg-secondary"
           >
-            {hoverIndex === links.length + 1 && (
-              <m.span
-                transition={{ type: "spring", bounce: 0.3 }}
-                layoutId="sidebar-hover"
-                className="absolute top-0 left-0 w-full h-full bg-secondary rounded-lg -z-10"
-              />
-            )}
             {isOpen ? <ChevronsLeft /> : <ChevronsRight />}
           </Button>
         </div>
-        <div
-          className="flex flex-col pt-8 gap-1"
-          onMouseLeave={() => setHoverIndex(null)}
-        >
+        <div className="flex flex-col pt-8 gap-1">
           {links.map((link, index) => (
             <Link
-              onMouseEnter={() => setHoverIndex(index)}
-              key={link.text + index}
-              href={"/"}
+              key={index}
+              href={link.path}
               className={cn(
                 "flex items-center p-2 rounded-lg relative",
                 isOpen ? "gap-4" : "justify-center"
               )}
             >
-              {hoverIndex === index && (
+              {link.path === pathname && (
                 <m.span
                   transition={{ type: "spring", bounce: 0.3 }}
                   layoutId="sidebar-hover"
@@ -158,7 +147,7 @@ const links = [
   {
     text: "Talk to Pdf",
     icon: <FileText className="text-violet-600" />,
-    path: "/",
+    path: "/dashboard/pdf",
   },
   {
     text: "Voice Generator",
@@ -168,6 +157,6 @@ const links = [
   {
     text: "Speech converter",
     icon: <Music className="text-orange-500" />,
-    path: "/",
+    path: "/dashboard",
   },
 ];

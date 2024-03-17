@@ -1,6 +1,5 @@
-import { createUser } from "@/lib/user";
+import { db } from "@/lib/prisma";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { User } from "@prisma/client";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
 
@@ -63,15 +62,21 @@ export async function POST(req: Request) {
         );
       }
 
-      const user = {
-        clerkUserId: id,
-        email: email_addresses[0].email_address,
-        ...(first_name ? { firstName: first_name } : {}),
-        ...(last_name ? { lastName: last_name } : {}),
-        ...(image_url ? { imageUrl: image_url } : {}),
-      };
+      await db.user.create({
+        data: {
+          clerkUserId: id,
+          email: email_addresses[0].email_address,
+          firstName: first_name,
+          lastName: last_name,
+          imageUrl: image_url,
+        },
+      });
 
-      await createUser(user as User);
+      await db.subscription.create({
+        data: {
+          clerkUserId: id,
+        },
+      });
     }
 
     return new Response("User saved successfully", { status: 200 });
